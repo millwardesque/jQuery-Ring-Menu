@@ -10,10 +10,11 @@
   $.fn.ringmenu = function(options) {
     // Default options
     var defaults = {
-      radian_offset: Math.PI / 2.0,
-      item_type: 'li',
-      radius: 100,
-      duration: 350
+      radian_offset: Math.PI / 2.0, // Amount to shift all of the items from their default position in the ring.  Useful for positioning the first element of the list at the of the ring (90 degrees) rather than the far right (0 degrees) 
+      item_type: 'li',  // Selector string for the items in the list
+      radius: 100,      // Radius of the ring
+      duration: 350,    // Duration of the expand / close animation
+      use_anchor_hrefs: true  // If true, we'll generate click events for each list item which redirect to the href specified in the first anchor contained within the list item
     }
     
     // Process each element 
@@ -21,11 +22,16 @@
       var that = this;
       this.options = $.extend(defaults, options);
       this.is_tracking = false; // True if the element is currently tracking the mouse position
-      this.is_expanded = false; // True if the men is currently expanded
+      this.is_expanded = false; // True if the menu is currently expanded
       this.selected = null;     // Selected item
 
       // Hide the elements
       $(that.options.item_type, this).hide();
+      
+      // Fix the item-list to redirect to the URL specified by the first child anchor when clicked on
+      if (this.options.use_anchor_hrefs) {
+        set_anchors_as_events(this, this.options.item_type);
+      }
       
       /**
        * Process clicks on the menu
@@ -101,6 +107,26 @@
     /********************
      * Helper functions
      ********************/
+    
+    /**
+     * Generates window.location redirections on-click for any list items containing an anchor as a child.
+     * The first anchor child is used
+     * 
+     * @param object containter The DOM element that contains the menu items
+     * @param string item_type Selector string for each of the list items 
+     */
+    function set_anchors_as_events(container, item_type) {
+      $(item_type, container).each(function(index, element) {
+        var link = $('a:first', $(this));
+        var url = $(link).attr('href');
+        
+        if (url) {
+          $(this).click(function(evnt) {
+            window.location = url;
+          });
+        }
+      });
+    }
    
     /**
      * Calculates which section a given position is in relative to a given element

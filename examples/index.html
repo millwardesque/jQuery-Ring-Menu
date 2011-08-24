@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ring Menu Demo Page</title>
+    
+    <script type="text/javascript" src="js/jquery-1.6.1.js"></script>
+    <script type="text/javascript" src="../jquery.ringmenu.js"></script>
+    <script type="text/javascript" src="js/test.ringmenu.js"></script>
+    
+    <style>
+      #example-1 ul{
+        position: relative;
+        margin:0;
+        padding:0;
+        width: 200px;
+        height:200px;
+        border: 1px solid #00ff00;
+      }
+      
+      #example-1 li {
+        position: absolute;
+        list-style:none;
+      }
+      
+      #example-1 li.hovered {
+        background: #00ff00;
+      }
+      
+    </style>
+  </head>
+  
+  <body>
+    <div id="example-1">
+      <h2>Example 1</h2>
+      <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li><a href="http://www.google.com">Item 3</a></li>
+        <li>Item 4</li>
+        <li>Item 5</li>
+        <li>Item 6</li>
+      </ul>
+      <p class="status"></p>
+    </div>
+  </body>
+</html>
