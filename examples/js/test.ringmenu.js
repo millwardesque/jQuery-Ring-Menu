@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $("#example-1 ul").ringmenu({
-    use_anchor_hrefs: true
+    use_anchor_hrefs: false
   });
   
   $('#example-1 li').click(function(evnt) {

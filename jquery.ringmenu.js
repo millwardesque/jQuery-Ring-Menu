@@ -14,7 +14,8 @@
       item_type: 'li',  // Selector string for the items in the list
       radius: 100,      // Radius of the ring
       duration: 350,    // Duration of the expand / close animation
-      use_anchor_hrefs: true  // If true, we'll generate click events for each list item which redirect to the href specified in the first anchor contained within the list item
+      use_anchor_hrefs: true,  // If true, we'll generate click events for each list item which redirect to the href specified in the first anchor contained within the list item
+      show_first_item_on_load: true // If true, show the first list item on load.  If false, all list-items are hidden
     }
     
     // Process each element 
@@ -25,8 +26,17 @@
       this.is_expanded = false; // True if the menu is currently expanded
       this.selected = null;     // Selected item
 
-      // Hide the elements
+      // Hide each item.  If the correct option is set, keep the first item visible
       $(that.options.item_type, this).hide();
+      if (this.options.show_first_item_on_load) {
+        $(that.options.item_type, this).filter(':first').show();
+      }
+      
+      // Move the items to the center of the container
+      $(that.options.item_type, this).css({
+        marginLeft: $(that).width() / 2,
+        marginTop: $(that).height() / 2
+      })
       
       // Fix the item-list to redirect to the URL specified by the first child anchor when clicked on
       if (this.options.use_anchor_hrefs) {
@@ -212,8 +222,8 @@
       }
       else {  // Contract the ring menu
         $(container.options.item_type, container).animate({
-            marginLeft: 0,
-            marginTop: 0
+            marginLeft: position.x,
+            marginTop: position.y
           }, {
             duration: container.options.duration,
             queue: false,
