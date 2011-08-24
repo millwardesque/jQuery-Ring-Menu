@@ -27,15 +27,16 @@
       this.selected = null;     // Selected item
 
       // Hide each item.  If the correct option is set, keep the first item visible
+      var first_item = $(that.options.item_type, this).filter(':first');
       $(that.options.item_type, this).hide();
       if (this.options.show_first_item_on_load) {
-        $(that.options.item_type, this).filter(':first').show();
+        $(first_item).show();
       }
       
       // Move the items to the center of the container
       $(that.options.item_type, this).css({
-        marginLeft: $(that).width() / 2,
-        marginTop: $(that).height() / 2
+        marginLeft: $(that).width() / 2 - first_item.width() / 2,
+        marginTop: $(that).height() / 2 - first_item.height() / 2
       })
       
       // Fix the item-list to redirect to the URL specified by the first child anchor when clicked on
@@ -66,7 +67,6 @@
         }
         
         // Animate the menu
-        var position = $(this).position();
         animate_ring_menu(this, {x: $(that).width() / 2, y: $(that).height() / 2 });
       });
             
@@ -196,9 +196,10 @@
         var num_items = $(container.options.item_type, container).length;  // The number of items in the list
         var rads_per_item = 2 * Math.PI / num_items;  // The number of radians given to each item
         
-        $(container.options.item_type, container).show();
         $(container.options.item_type, container).each(function() {
-          // Figure out how for the item needs to travel outwards
+          $(this).show(); // Make the item visible
+          
+          // Figure out how far the item needs to travel outwards
           var angle = container.options.radian_offset + (rads_per_item * count);
           var delta = {
             x: position.x - $(this).width() / 2 + container.options.radius * Math.cos(angle),
@@ -222,8 +223,8 @@
       }
       else {  // Contract the ring menu
         $(container.options.item_type, container).animate({
-            marginLeft: position.x,
-            marginTop: position.y
+            marginLeft: position.x - $(container.selected).width() / 2,
+            marginTop: position.y - $(container.selected).height() / 2
           }, {
             duration: container.options.duration,
             queue: false,
