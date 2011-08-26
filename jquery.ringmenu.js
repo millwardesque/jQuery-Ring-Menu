@@ -209,7 +209,8 @@
           // Animate the item
           $(this).animate({
               marginLeft: delta.x,
-              marginTop: delta.y
+              marginTop: delta.y,
+              opacity: 1
             }, {
               duration: container.options.duration,
               queue: false,
@@ -224,7 +225,8 @@
       else {  // Contract the ring menu
         $(container.options.item_type, container).animate({
             marginLeft: position.x - $(container.selected).width() / 2,
-            marginTop: position.y - $(container.selected).height() / 2
+            marginTop: position.y - $(container.selected).height() / 2,
+            opacity: 0
           }, {
             duration: container.options.duration,
             queue: false,
