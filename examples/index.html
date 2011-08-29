@@ -3,33 +3,20 @@
   <head>
     <title>Ring Menu Demo Page</title>
     
-    <script type="text/javascript" src="js/jquery-1.6.1.js"></script>
-    <script type="text/javascript" src="../jquery.ringmenu.js"></script>
-    <script type="text/javascript" src="js/test.ringmenu.js"></script>
-    
+    <!-- The ring-menu plugin uses the width of the container and items when initializing, so that width must be set here above the JS -->    
+    <link rel="stylesheet" type="text/css" href="../jquery.ringmenu.css" />
     <style>
-      #example-1 ul{
-        position: relative;
-        margin:0;
-        padding:0;
-        width: 200px;
-        height:200px;
-        cursor: pointer;
-        border: 1px solid #00ff00;
-      }
-      
-      #example-1 li {
-        position: absolute;
-        list-style:none;
-        width:60px;
-        text-align: center;
-      }
       
       #example-1 li.hovered {
         background: #00cf00;
       }
       
     </style>
+    
+    <script type="text/javascript" src="js/jquery-1.6.1.js"></script>
+    <script type="text/javascript" src="../jquery.ringmenu.js"></script>
+    <script type="text/javascript" src="js/test.ringmenu.js"></script>
+
   </head>
   
   <body>
@@ -38,7 +25,7 @@
       <ul>
         <li>Item 1</li>
         <li>Item 2</li>
-        <li><a href="http://www.google.com">Item 3</a></li>
+        <li>Item 3</li>
         <li>Item 4</li>
         <li>Item 5</li>
         <li>Item 6</li>

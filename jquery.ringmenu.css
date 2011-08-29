@@ -1,0 +1,11 @@
+.ringmenu {
+  position: relative;
+  margin:0;
+  padding:0;
+  cursor: pointer;
+}
+
+.ringmenu .ringmenu-item {
+  position: absolute;
+  text-align: center;
+}

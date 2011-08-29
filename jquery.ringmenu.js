@@ -20,24 +20,47 @@
     
     // Process each element 
     return this.each(function() {
-      var that = this;
       this.options = $.extend(defaults, options);
+      
+      var that = this;  // Helper variable for referring to this object within other events
+      var items = $(that.options.item_type, this);  // All of the items in this container
+      var first_item = $(items).filter(':first'); // The first item in the list
       this.is_tracking = false; // True if the element is currently tracking the mouse position
       this.is_expanded = false; // True if the menu is currently expanded
-      this.selected = null;     // Selected item
 
+      // Add classes to the container and items
+      $(this).addClass('ringmenu');
+      $(items).addClass('ringmenu-item');
+      
+      // Add custom CSS to the container and items
+      $(this).css({
+        width: this.options.radius * 2,
+        height: this.options.radius * 2,
+      });
+      
+      /**
+       * Calculate the minimum width of an item.  This needs to be set to prevent the right-most ring items
+       * from collapsing into multiple lines when reaching the right-most edge of the container
+       */
+      var min_width = $(this).width();
+      $(items).each(function() {
+        if ($(this).width() < min_width) {
+          min_width = $(this).width();
+        }
+      });
+      
+      // Move the items to the center of the container 
+      $(items).css({
+        marginLeft: $(that).width() / 2 - first_item.width() / 2,
+        marginTop: $(that).height() / 2 - first_item.height() / 2,
+        width: min_width
+      })
+      
       // Hide each item.  If the correct option is set, keep the first item visible
-      var first_item = $(that.options.item_type, this).filter(':first');
-      $(that.options.item_type, this).hide();
+      $(items).hide();
       if (this.options.show_first_item_on_load) {
         $(first_item).show();
       }
-      
-      // Move the items to the center of the container
-      $(that.options.item_type, this).css({
-        marginLeft: $(that).width() / 2 - first_item.width() / 2,
-        marginTop: $(that).height() / 2 - first_item.height() / 2
-      })
       
       // Fix the item-list to redirect to the URL specified by the first child anchor when clicked on
       if (this.options.use_anchor_hrefs) {
@@ -62,7 +85,7 @@
           var num_items = $(that.options.item_type, that).length;
           var section = calculate_ring_section(click_position, that, num_items, that.options.radian_offset);
           var section_element = $(that.options.item_type, that).get(section);
-          that.selected = $(section_element);
+          $(section_element).addClass('ringmenu-selected');
           $(section_element).click();
         }
         
@@ -223,16 +246,22 @@
         $(container.options.item_type, container).show();
       }
       else {  // Contract the ring menu
-        $(container.options.item_type, container).animate({
-            marginLeft: position.x - $(container.selected).width() / 2,
-            marginTop: position.y - $(container.selected).height() / 2,
+        var selected = $('.ringmenu-selected', container);
+        $(container.options.item_type, container).stop().animate({
+            marginLeft: position.x - $(selected).width() / 2,
+            marginTop: position.y - $(selected).height() / 2,
             opacity: 0
           }, {
             duration: container.options.duration,
             queue: false,
-            complete: function() {
-              $(container.options.item_type, container).hide();
-              $(container.selected).show();
+            complete: function() {              
+              if ($(this).hasClass('ringmenu-selected')) {
+                $(this).removeClass('ringmenu-selected');
+                $(this).css('opacity', 1.0);
+              }
+              else {
+                $(this).hide();
+              }              
             }
           }
         );
