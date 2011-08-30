@@ -15,7 +15,7 @@
       radius: 100,      // Radius of the ring
       duration: 350,    // Duration of the expand / close animation
       use_anchor_hrefs: true,  // If true, we'll generate click events for each list item which redirect to the href specified in the first anchor contained within the list item
-      show_first_item_on_load: true // If true, show the first list item on load.  If false, all list-items are hidden
+      show_selected_when_closed: true // If true, show the selected menu item when the menu is closed.  This will also show the first tem on load.  If false, the selected item is hidden on close, and the first item is hidden on load.
     }
     
     // Process each element 
@@ -58,7 +58,7 @@
       
       // Hide each item.  If the correct option is set, keep the first item visible
       $(items).hide();
-      if (this.options.show_first_item_on_load) {
+      if (this.options.show_selected_when_closed) {
         $(first_item).show();
       }
       
@@ -257,7 +257,9 @@
             complete: function() {              
               if ($(this).hasClass('ringmenu-selected')) {
                 $(this).removeClass('ringmenu-selected');
-                $(this).css('opacity', 1.0);
+                if (container.options.show_selected_when_closed) {
+                  $(this).css('opacity', 1.0);
+                }
               }
               else {
                 $(this).hide();
