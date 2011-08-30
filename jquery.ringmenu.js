@@ -230,7 +230,7 @@
           }
           
           // Animate the item
-          $(this).animate({
+          $(this).stop().animate({
               marginLeft: delta.x,
               marginTop: delta.y,
               opacity: 1
