@@ -24,8 +24,18 @@ after the document is ready.
 
 You may provide a set of options as the lone parameter to the ringmenu() function to change the behaviour of the plugin.  See the "Configuration Parameters" section below for details
 
-Refer to the example/ folder for a working demo and details of the implementation
+You may also manually trigger the menu to open, close, or toggle after the initial call to ringmenu() by calling the ringmenu() function on the same element and passing one of the following strings instead of the Options array
+1. toggle.  Open the menu if it's closed, and close the menu if it's open.
+2. open.  Open the menu if it's closed.  If the menu is already open, do nothing.
+3. close.  Close the menu if it's open.  If the menu is already closed, do nothing.
 
+e.g.
+$("#example-container").ringmenu();  // Initialize the ring menu
+$("#my-trigger").click(function() {  // Toggle the ring menu when someone clicks on the #my-trigger element
+  $("#example-container").ringmenu('toggle');
+});
+
+Refer to the example/ folder for a working demo and details of the implementation
 
 # Configuration Parameters
 
@@ -41,4 +51,4 @@ duration: Deafult = 350.  Duration of the ring expand and close animations
 use_anchor_hrefs: Default = true. If true, the plugin will generate click events for each menu item which contains an anchor with an href attribute.
   This 'fixes' the manually generated "click" event's behaviour of not actually directing the user to the destination specified in an anchor.
 
-show_first_item_on_load: Default = true. If true, the first list item will be displayed on load (when the list is in a collapsed state.  If false, all list-items are hidden after initialization.
+show_selected_when_closed = true. If true, show the selected menu item when the menu is closed.  This will also show the first tem on load.  If false, the selected item is hidden on close, and the first item is hidden on load.

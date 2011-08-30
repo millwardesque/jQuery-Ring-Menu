@@ -8,18 +8,46 @@
 
 (function($) {
   $.fn.ringmenu = function(options) {
+    
     // Default options
     var defaults = {
       radian_offset: Math.PI / 2.0, // Amount to shift all of the items from their default position in the ring.  Useful for positioning the first element of the list at the of the ring (90 degrees) rather than the far right (0 degrees) 
       item_type: 'li',  // Selector string for the items in the list
-      radius: 100,      // Radius of the ring
-      duration: 350,    // Duration of the expand / close animation
+      radius: 100,      // Radius of the ring in pixels
+      duration: 350,    // Duration of the expand / close animation in milliseconds
       use_anchor_hrefs: true,  // If true, we'll generate click events for each list item which redirect to the href specified in the first anchor contained within the list item
       show_selected_when_closed: true // If true, show the selected menu item when the menu is closed.  This will also show the first tem on load.  If false, the selected item is hidden on close, and the first item is hidden on load.
     }
     
     // Process each element 
     return this.each(function() {
+      // Check to see if this is for initialization or an operation on an existing menu
+      if (typeof options == "string") {
+        switch(options) {
+          case 'open':
+            // Open the menu if it's not already
+            if (!this.is_expanded) {
+              animate_ring_menu(this, {x: $(this).width() / 2, y: $(this).height() / 2 });
+            }
+            break;
+          case 'close':
+            // Close the menu if it's not already
+            if (this.is_expanded) {
+              animate_ring_menu(this, {x: $(this).width() / 2, y: $(this).height() / 2 });
+            }
+            break;
+          case 'toggle':
+            // Animate the menu
+            animate_ring_menu(this, {x: $(this).width() / 2, y: $(this).height() / 2 });
+            break;
+          default:
+            console.log("Unknown ringmenu command: " + options);
+            break;
+        };
+        return;
+      }
+      
+      // Standard Initialization process
       this.options = $.extend(defaults, options);
       
       var that = this;  // Helper variable for referring to this object within other events
@@ -214,12 +242,17 @@
     function animate_ring_menu(container, position) {
       container.is_expanded ^= true; // Toggle the state of the menu
       
-      if (container.is_expanded) { // Expand the ring menu       
+      if (container.is_expanded) { // Expand the ring menu
         var count = 0;  // Loop counter
         var num_items = $(container.options.item_type, container).length;  // The number of items in the list
         var rads_per_item = 2 * Math.PI / num_items;  // The number of radians given to each item
-        
+              
         $(container.options.item_type, container).each(function() {
+          // Clear any existing selected element
+          if ($(this).hasClass('ringmenu-selected')) {
+            $(this).removeClass('ringmenu-selected');
+          }
+        
           $(this).show(); // Make the item visible
           
           // Figure out how far the item needs to travel outwards
